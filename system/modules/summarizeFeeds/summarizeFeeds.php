@@ -206,11 +206,16 @@ class summarizeFeeds extends Calendar
 
 				$strUrl = $this->generateFrontendUrl($objPage->fetchAssoc(), '/items/%s');
 				
-				// no chance to add event image ... not provided by core
+				if (strlen($objNews->singleSRC) > 0) {
+        			$image = (($objNews->source == 'external') ? '' : $strLink) . $this->getImage($objNews->singleSRC, 250,null);
+        			$image = '<img src="' . $image . '" border="0" />' ;
+        		} else {
+                    $image = "";
+                }
 				
 				$objItem = new FeedItem();
 				$objItem->title = $objNews->headline;
-				$objItem->description = $this->description($arrFeed, $objNews->teaser, $objNews->text);
+				$objItem->description = $image. $this->description($arrFeed, $objNews->teaser, $objNews->text);
 				$objItem->link = (($objNews->source == 'external') ? '' : $this->getRootDNS($objPage->pid, $strLink)) . $this->newsSummarizeFeeds->newsGetLink($objNews, $strUrl);
 				$objItem->published = $objNews->date;
 
@@ -333,12 +338,7 @@ class summarizeFeeds extends Calendar
 							break(3);
 						}
 						
-						if (strlen($event['singleSRC']) > 1) {
-							$image = (($event['source'] == 'external') ? '' : $strLink) . $this->getImage($event['singleSRC'], 250,null);
-							$image = '<img src="' . $image . '" border="0" />' ;
-						} else {
-							$image = "";
-						}
+						// no chance to add event image ... not provided by core
 
 						$objItem = new FeedItem();
 						$objItem->title = $event['title'];
