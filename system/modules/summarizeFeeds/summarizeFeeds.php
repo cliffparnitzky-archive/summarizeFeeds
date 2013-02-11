@@ -333,9 +333,6 @@ class summarizeFeeds extends Calendar
 							break(3);
 						}
 						
-						echo "test: " . $event['singleSRC'];
-						echo print_r($event);
-						
 						if (strlen($event['singleSRC']) > 1) {
 							$image = (($event['source'] == 'external') ? '' : $strLink) . $this->getImage($event['singleSRC'], 250,null);
 							$image = '<img src="' . $image . '" border="0" />' ;
