@@ -269,7 +269,7 @@ class summarizeFeeds extends Calendar
 				
 				$intStart = $objArticle->startTime;
 				
-				$this->addEvent($objArticle, $intStart, $objArticle->endTime, $strUrl);
+				$this->addEvent($objArticle, $intStart, $objArticle->endTime, $strUrl, $strLink);
 				
 				// Add domain
 				if($intStart > $time)
@@ -305,7 +305,8 @@ class summarizeFeeds extends Calendar
 						{
 							$intStart = $objArticle->startTime;
 				
-							$this->addEvent($objArticle, $intStart, $objArticle->endTime, $strUrl);
+							$this->addEvent($objArticle, $intStart, $objArticle->endTime, $strUrl, $strLink);
+							
 							
 							// Add domain
 							$intKey = date('Ymd', $intStart);
