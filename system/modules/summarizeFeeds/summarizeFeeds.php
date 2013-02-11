@@ -181,23 +181,23 @@ class summarizeFeeds extends Calendar
 			
 			$ids = '(pid='.implode(' OR pid=', $archives).')';
 		
-			$objArticleStmt = $this->Database->prepare("SELECT * FROM tl_news WHERE ".$ids." AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY date DESC");
+			$objNewsStmt = $this->Database->prepare("SELECT * FROM tl_news WHERE ".$ids." AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY date DESC");
 
 			if ($arrFeed['maxItems'] > 0)
 			{
-				$objArticleStmt->limit($arrFeed['maxItems']);
+				$objNewsStmt->limit($arrFeed['maxItems']);
 			}
 			
-			$objArticle = $objArticleStmt->execute($time, $time);
+			$objNews = $objNewsStmt->execute($time, $time);
 			
 			$this->import('newsSummarizeFeeds');
 
 			// Parse items
-			while ($objArticle->next())
+			while ($objNews->next())
 			{
 				$objParent = $this->Database->prepare("SELECT jumpTo FROM tl_news_archive WHERE id=?")
 											->limit(1)
-											->execute($objArticle->pid);
+											->execute($objNews->pid);
 			
 				// Get default URL
 				$objPage = $this->Database->prepare("SELECT id, pid, alias FROM tl_page WHERE id=?")
@@ -206,17 +206,18 @@ class summarizeFeeds extends Calendar
 
 				$strUrl = $this->generateFrontendUrl($objPage->fetchAssoc(), '/items/%s');
 				
+				// no chance to add event image ... not provided by core
+				
 				$objItem = new FeedItem();
-
-				$objItem->title = $objArticle->headline;
-				$objItem->description = $this->description($arrFeed, $objArticle->teaser, $objArticle->text);
-				$objItem->link = (($objArticle->source == 'external') ? '' : $this->getRootDNS($objPage->pid, $strLink)) . $this->newsSummarizeFeeds->newsGetLink($objArticle, $strUrl);
-				$objItem->published = $objArticle->date;
+				$objItem->title = $objNews->headline;
+				$objItem->description = $this->description($arrFeed, $objNews->teaser, $objNews->text);
+				$objItem->link = (($objNews->source == 'external') ? '' : $this->getRootDNS($objPage->pid, $strLink)) . $this->newsSummarizeFeeds->newsGetLink($objNews, $strUrl);
+				$objItem->published = $objNews->date;
 
 				// Enclosure
-				if ($objArticle->addEnclosure)
+				if ($objNews->addEnclosure)
 				{
-					$arrEnclosure = deserialize($objArticle->enclosure, true);
+					$arrEnclosure = deserialize($objNews->enclosure, true);
 
 					if (is_array($arrEnclosure))
 					{
@@ -242,23 +243,23 @@ class summarizeFeeds extends Calendar
 			
 			$ids = '(pid='.implode(' OR pid=', $calendar).')';
 			
-			$objArticleStmt = $this->Database->prepare("SELECT * FROM tl_calendar_events WHERE  ".$ids." AND (startTime>=? OR (recurring=1 AND (recurrences=0 OR repeatEnd>=?))) AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY startTime");
+			$objEventStmt = $this->Database->prepare("SELECT * FROM tl_calendar_events WHERE  ".$ids." AND (startTime>=? OR (recurring=1 AND (recurrences=0 OR repeatEnd>=?))) AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY startTime");
 
 			if ($arrFeed['maxItems'] > 0)
 			{
-				$objArticleStmt->limit($arrFeed['maxItems']);
+				$objEventStmt->limit($arrFeed['maxItems']);
 			}
 
-			$objArticle = $objArticleStmt->execute($time, $time, $time, $time);
+			$objEvent = $objEventStmt->execute($time, $time, $time, $time);
 			
 			$intRecord = 0;
 
 			// Parse items
-			while ($objArticle->next())
+			while ($objEvent->next())
 			{
 				$objParent = $this->Database->prepare("SELECT jumpTo FROM tl_calendar WHERE id=?")
 											->limit(1)
-											->execute($objArticle->pid);
+											->execute($objEvent->pid);
 			
 				// Get default URL
 				$objPage = $this->Database->prepare("SELECT id, pid, alias FROM tl_page WHERE id=?")
@@ -267,9 +268,9 @@ class summarizeFeeds extends Calendar
 
 				$strUrl = $this->generateFrontendUrl($objPage->fetchAssoc(), '/events/%s');
 				
-				$intStart = $objArticle->startTime;
+				$intStart = $objEvent->startTime;
 				
-				$this->addEvent($objArticle, $intStart, $objArticle->endTime, $strUrl, $strLink);
+				$this->addEvent($objEvent, $intStart, $objEvent->endTime, $strUrl, $strLink);
 				
 				// Add domain
 				if($intStart > $time)
@@ -280,15 +281,15 @@ class summarizeFeeds extends Calendar
 				}
 
 				// Recurring events
-				if ($objArticle->recurring)
+				if ($objEvent->recurring)
 				{
 					$count = 0;
-					$arrRepeat = deserialize($objArticle->repeatEach);
+					$arrRepeat = deserialize($objEvent->repeatEach);
 
 					// Do not include more than 20 recurrences
 					while ($count++ < 20)
 					{
-						if ($objArticle->recurrences > 0 && $count >= $objArticle->recurrences)
+						if ($objEvent->recurrences > 0 && $count >= $objEvent->recurrences)
 						{
 							break;
 						}
@@ -298,14 +299,14 @@ class summarizeFeeds extends Calendar
 
 						$strtotime = '+ ' . $arg . ' ' . $unit;
 
-						$objArticle->startTime = strtotime($strtotime, $objArticle->startTime);
-						$objArticle->endTime = strtotime($strtotime, $objArticle->endTime);
+						$objEvent->startTime = strtotime($strtotime, $objEvent->startTime);
+						$objEvent->endTime = strtotime($strtotime, $objEvent->endTime);
 
-						if ($objArticle->startTime > $time)
+						if ($objEvent->startTime > $time)
 						{
-							$intStart = $objArticle->startTime;
+							$intStart = $objEvent->startTime;
 				
-							$this->addEvent($objArticle, $intStart, $objArticle->endTime, $strUrl, $strLink);
+							$this->addEvent($objEvent, $intStart, $objEvent->endTime, $strUrl, $strLink);
 							
 							
 							// Add domain
@@ -331,9 +332,18 @@ class summarizeFeeds extends Calendar
 						{
 							break(3);
 						}
+						
+						echo "test: " . $event['singleSRC'];
+						echo print_r($event);
+						
+						if (strlen($event['singleSRC']) > 1) {
+							$image = (($event['source'] == 'external') ? '' : $strLink) . $this->getImage($event['singleSRC'], 250,null);
+							$image = '<img src="' . $image . '" border="0" />' ;
+						} else {
+							$image = "";
+						}
 
 						$objItem = new FeedItem();
-
 						$objItem->title = $event['title'];
 						$objItem->description = $this->description($arrFeed, $event['teaser'], $event['description']);
 						$objItem->link = $event['domain'] . $event['link'];
@@ -466,9 +476,9 @@ class summarizeFeeds extends Calendar
 
 class newsSummarizeFeeds extends News
 {
-	public function newsGetLink(Database_Result $objArticle, $strUrl)
+	public function newsGetLink(Database_Result $obj, $strUrl)
 	{
-		return $this->getLink($objArticle, $strUrl);
+		return $this->getLink($obj, $strUrl);
 	}
 }z
 
