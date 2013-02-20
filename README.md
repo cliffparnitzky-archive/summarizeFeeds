@@ -22,8 +22,8 @@ https://github.com/cliffparnitzky/summarizeFeeds/issues
 Compatibility
 -------------
 
-- min. version: Contao 2.7.0
-- max. version: Contao 2.9.0
+- min. version: Contao 2.9.5
+- max. version: Contao 2.11.9
 
 
 Dependency
