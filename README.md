@@ -1,5 +1,5 @@
-Contao summarize Feeds Extension
-===================================
+Contao Extension: summarizeFeeds
+================================
 
 Summarize several news archives or calendars in one RSS or Atom feed.
 
@@ -23,7 +23,7 @@ Compatibility
 -------------
 
 - min. version: Contao 2.9.5
-- max. version: Contao 2.11.9
+- max. version: Contao 2.11.x
 
 
 Dependency
