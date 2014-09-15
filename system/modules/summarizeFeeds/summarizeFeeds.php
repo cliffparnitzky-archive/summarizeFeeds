@@ -181,7 +181,7 @@ class summarizeFeeds extends Calendar
 			
 			$ids = '(pid='.implode(' OR pid=', $archives).')';
 		
-			$objNewsStmt = $this->Database->prepare("SELECT * FROM tl_news WHERE ".$ids." AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY date DESC");
+			$objNewsStmt = $this->Database->prepare("SELECT * FROM tl_news4ward_article WHERE ".$ids." AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY date DESC");
 
 			if ($arrFeed['maxItems'] > 0)
 			{
@@ -195,7 +195,7 @@ class summarizeFeeds extends Calendar
 			// Parse items
 			while ($objNews->next())
 			{
-				$objParent = $this->Database->prepare("SELECT jumpTo FROM tl_news_archive WHERE id=?")
+				$objParent = $this->Database->prepare("SELECT jumpTo FROM tl_news4ward WHERE id=?")
 											->limit(1)
 											->execute($objNews->pid);
 			
