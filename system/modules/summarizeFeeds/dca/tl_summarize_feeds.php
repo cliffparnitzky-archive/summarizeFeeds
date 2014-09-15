@@ -29,7 +29,7 @@
 /**
  * Table Backend-Tabellen 
  */
-$GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
+$GLOBALS['TL_DCA']['tl_summarize_feeds'] = array
 (
 
 	// Config
@@ -39,15 +39,15 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		'enableVersioning'		=> true,
 		'onload_callback'		=> array
 		(
-			array('tl_summarizeFeeds', 'updatePalette')
+			array('tl_summarize_feeds', 'updatePalette')
 		),
 		'onsubmit_callback' 	=> array
 		(
-			array('tl_summarizeFeeds', 'generateFeed')
+			array('tl_summarize_feeds', 'generateFeed')
 		),
 		'ondelete_callback' 	=> array
 		(
-			array('tl_summarizeFeeds', 'deleteFeed')
+			array('tl_summarize_feeds', 'deleteFeed')
 		)
 	),
 	
@@ -80,26 +80,26 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		(
 			'edit' => array
 			(
-				'label'			=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['edit'],
+				'label'			=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['edit'],
 				'href'			=> 'act=edit',
 				'icon'			=> 'edit.gif'
 			),
 			'copy' => array
 			(
-				'label'			=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['copy'],
+				'label'			=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['copy'],
 				'href'			=> 'act=copy',
 				'icon'			=> 'copy.gif'
 			),
 			'delete' => array
 			(
-				'label'			=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['delete'],
+				'label'			=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['delete'],
 				'href'			=> 'act=delete',
 				'icon'			=> 'delete.gif',
 				'attributes'	=> 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'show' => array
 			(
-				'label'	=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['show'],
+				'label'	=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['show'],
 				'href'	=> 'act=show',
 				'icon'	=> 'show.gif'
 			)
@@ -113,8 +113,10 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		'default' 				=> '{resource_legend},resource',
 		'newsteaser' 			=> '{resource_legend},resource,newsArchives;{title_legend},title,alias,description;{settings_legend},source,maxItems,language,format,feedBase',
 		'calendarteaser' 		=> '{resource_legend},resource,calendar;{title_legend},title,alias,description;{settings_legend},source,maxItems,language,format,feedBase',
+		'news4wardteaser' 		=> '{resource_legend},resource,news4wardArchives;{title_legend},title,alias,description;{settings_legend},source,maxItems,language,format,feedBase',
 		'newstext' 				=> '{resource_legend},resource,newsArchives;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase',
-		'calendartext' 			=> '{resource_legend},resource,calendar;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase'
+		'calendartext' 			=> '{resource_legend},resource,calendar;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase',
+		'news4wardtext' 		=> '{resource_legend},resource,news4wardArchives;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase'
 	),
 
 	// Fields
@@ -122,32 +124,40 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 	(
 		'resource' => array
 		(
-			'label'				=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['resource'],
+			'label'				=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource'],
 			'inputType'			=> 'radio',
 			'exclude'			=> true,
-			'options'			=> array('news', 'calendar'),
-			'reference'			=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['resource_values'],
+			'options'			=> array('news', 'calendar', 'news4ward'),
+			'reference'			=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values'],
 			'eval'				=> array('mandatory'=>true, 'submitOnChange'=>true)
 		),
 		'newsArchives' => array
 		(
-			'label'             => &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['newsArchives'],
+			'label'             => &$GLOBALS['TL_LANG']['tl_summarize_feeds']['newsArchives'],
 			'exclude'           => true,
 			'inputType'         => 'checkbox',
-			'options_callback'	=> array('tl_summarizeFeeds', 'getNewsArchives'),
+			'options_callback'	=> array('tl_summarize_feeds', 'getNewsArchives'),
 			'eval'              => array('multiple'=>true, 'mandatory'=>true)
 		),
 		'calendar' => array
 		(
-			'label'             => &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['calendar'],
+			'label'             => &$GLOBALS['TL_LANG']['tl_summarize_feeds']['calendar'],
 			'exclude'           => true,
 			'inputType'         => 'checkbox',
-			'options_callback'	=> array('tl_summarizeFeeds', 'getCalendar'),
+			'options_callback'	=> array('tl_summarize_feeds', 'getCalendar'),
+			'eval'              => array('multiple'=>true, 'mandatory'=>true)
+		),
+		'news4wardArchives' => array
+		(
+			'label'             => &$GLOBALS['TL_LANG']['tl_summarize_feeds']['news4wardArchives'],
+			'exclude'           => true,
+			'inputType'         => 'checkbox',
+			'options_callback'	=> array('tl_summarize_feeds', 'getNews4WardArchives'),
 			'eval'              => array('multiple'=>true, 'mandatory'=>true)
 		),
 		'title' => array
 		(
-			'label'				=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['title'],
+			'label'				=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['title'],
 			'exclude'			=> true,
 			'search'			=> true,
 			'inputType'			=> 'text',
@@ -155,35 +165,35 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		),
 		'alias' => array
 		(
-			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['alias'],
+			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['alias'],
 			'exclude'   		=> true,
 			'inputType'			=> 'text',
 			'eval'      		=> array('mandatory'=>true, 'rgxp'=>'alnum', 'unique'=>true, 'doNotCopy'=>true, 'spaceToUnderscore'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
 			'save_callback' => array
 			(
-				array('tl_summarizeFeeds', 'checkFeedAlias')
+				array('tl_summarize_feeds', 'checkFeedAlias')
 			)
 		),
 		'description' => array
 		(
-			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['description'],
+			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['description'],
 			'exclude'   		=> true,
 			'inputType'			=> 'textarea',
 			'eval'      		=> array('style'=>'height:60px;', 'tl_class'=>'clr')
 		),
 		'source' => array
 		(
-			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['source'],
+			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['source'],
 			'default'   		=> 'teaser',
 			'exclude'   		=> true,
 			'inputType'			=> 'select',
 			'options'   		=> array('teaser', 'text'),
-			'reference' 		=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds'],
+			'reference' 		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds'],
 			'eval'      		=> array('submitOnChange'=>true)
 		),
 		'letters' => array
 		(
-			'label'				=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['letters'],
+			'label'				=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['letters'],
 			'default'			=> 0,
 			'exclude'			=> true,
 			'inputType'			=> 'text',
@@ -191,7 +201,7 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		),
 		'maxItems' => array
 		(
-			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['maxItems'],
+			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['maxItems'],
 			'default'   		=> 25,
 			'exclude'   		=> true,
 			'inputType'			=> 'text',
@@ -199,7 +209,7 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		),
 		'language' => array
 		(
-			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['language'],
+			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['language'],
 			'exclude'   		=> true,
 			'filter'			=> true,
 			'inputType'			=> 'text',
@@ -207,7 +217,7 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		),
 		'format' => array
 		(
-			'label'				=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['format'],
+			'label'				=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['format'],
 			'default'   		=> 'rss',
 			'exclude'   		=> true,
 			'inputType'			=> 'select',
@@ -216,7 +226,7 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 		),
 		'feedBase' => array
 		(
-			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarizeFeeds']['feedBase'],
+			'label'     		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['feedBase'],
 			'default'   		=> $this->Environment->base,
 			'exclude'   		=> true,
 			'inputType'			=> 'text',
@@ -227,13 +237,13 @@ $GLOBALS['TL_DCA']['tl_summarizeFeeds'] = array
 
 
 /**
- * Class tl_summarizeFeeds
+ * Class tl_summarize_feeds
  *
  * @copyright  Torben Stoffer 2009
  * @author     Torben Stoffer - torben@online.de 
  * @package    summarizeFeeds
  */
-class tl_summarizeFeeds extends Backend
+class tl_summarize_feeds extends Backend
 {
 
 	/**
@@ -297,6 +307,30 @@ class tl_summarizeFeeds extends Backend
 		return $arrForms;
 	}
 	
+	/**
+	 * Get all news archives and return them as array
+	 * @return array
+	 */
+	public function getNews4WardArchives()
+	{
+		if (!$this->User->isAdmin && !is_array($this->User->news))
+		{
+		//	return array();
+		}
+
+		$arrForms = array();
+		$objForms = $this->Database->execute("SELECT id, title FROM tl_news4ward ORDER BY title");
+
+		while ($objForms->next())
+		{
+			if ($this->User->isAdmin || in_array($objForms->id, $this->User->news))
+			{
+				$arrForms[$objForms->id] = $objForms->title;
+			}
+		}
+
+		return $arrForms;
+	}
 	
 	/**
 	 * Update the Palette
@@ -307,13 +341,13 @@ class tl_summarizeFeeds extends Backend
 			return;
 		}
 		
-		$objFeed = $this->Database->prepare("SELECT source FROM tl_summarizeFeeds WHERE id=?")
+		$objFeed = $this->Database->prepare("SELECT source FROM tl_summarize_feeds WHERE id=?")
 									 ->limit(1)
 									 ->execute($dc->id);
 									 
 		if ($objFeed->numRows > 0 AND $objFeed->source == 'text')
 		{
-			$GLOBALS['TL_DCA']['tl_summarizeFeeds']['fields']['source']['eval']['tl_class']	= 'w50';
+			$GLOBALS['TL_DCA']['tl_summarize_feeds']['fields']['source']['eval']['tl_class']	= 'w50';
 		}
 	}
 

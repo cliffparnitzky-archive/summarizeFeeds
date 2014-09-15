@@ -32,7 +32,7 @@
  */
  $GLOBALS['BE_MOD']['content']['summarizeFeeds'] = array
 (
-	'tables'	=> array('tl_summarizeFeeds'),
+	'tables'	=> array('tl_summarize_feeds'),
 	'icon'		=> 'system/modules/summarizeFeeds/html/icon.png'
 );
 

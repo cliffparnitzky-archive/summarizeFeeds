@@ -11,15 +11,16 @@
 -- --------------------------------------------------------
 
 -- 
--- Table `tl_summarizeFeeds`
+-- Table `tl_summarize_feeds`
 -- 
 
-CREATE TABLE `tl_summarizeFeeds` (
+CREATE TABLE `tl_summarize_feeds` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `resource` varchar(8) NOT NULL default '',
   `newsArchives` blob NULL,
   `calendar` blob NULL,
+  `news4wardArchives` blob NULL,
   `title` varchar(255) NOT NULL default '',
   `alias` varbinary(128) NOT NULL default '',
   `description` text NULL,

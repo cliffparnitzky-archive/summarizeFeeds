@@ -68,7 +68,7 @@ class tl_layout_summarizeFeeds extends Backend
 	public function getSummarizedFeeds()
 	{
 		$arrFeeds = array();
-		$objFeeds = $this->Database->execute("SELECT id, title FROM tl_summarizeFeeds ORDER BY title");
+		$objFeeds = $this->Database->execute("SELECT id, title FROM tl_summarize_feeds ORDER BY title");
 
 		while ($objFeeds->next())
 		{

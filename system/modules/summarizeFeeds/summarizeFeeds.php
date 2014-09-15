@@ -33,9 +33,9 @@ class summarizeFeeds extends Calendar
 	 * Update a particular RSS feed
 	 * @param integer
 	 */
-	public function generateFeed($intId)
+	public function generateFeed($intId, $blnIsFeedId = false)
 	{
-		$objFeed = $this->Database->prepare("SELECT * FROM tl_summarizeFeeds WHERE id=?")
+		$objFeed = $this->Database->prepare("SELECT * FROM tl_summarize_feeds WHERE id=?")
 									 ->limit(1)
 									 ->execute($intId);
 
@@ -57,7 +57,7 @@ class summarizeFeeds extends Calendar
 	 */
 	public function generateFeeds()
 	{
-		$objFeeds = $this->Database->execute("SELECT * FROM tl_summarizeFeeds");
+		$objFeeds = $this->Database->execute("SELECT * FROM tl_summarize_feeds");
 
 		while ($objFeeds->next())
 		{
@@ -75,7 +75,7 @@ class summarizeFeeds extends Calendar
 	 */
 	public function deleteFeed($intId)
 	{
-		$objFeed = $this->Database->prepare("SELECT * FROM tl_summarizeFeeds WHERE id=?")
+		$objFeed = $this->Database->prepare("SELECT * FROM tl_summarize_feeds WHERE id=?")
 									 ->limit(1)
 									 ->execute($intId);
 
@@ -107,7 +107,7 @@ class summarizeFeeds extends Calendar
 	 */
 	public function getFeedNames()
 	{
-		$objFeeds = $this->Database->execute("SELECT * FROM tl_summarizeFeeds");
+		$objFeeds = $this->Database->execute("SELECT * FROM tl_summarize_feeds");
 		
 		$feedNames = array();
 
@@ -450,7 +450,7 @@ class summarizeFeeds extends Calendar
             // Add summarized feeds
             if (is_array($feedIDs) && count($feedIDs) > 0)
             {
-                $objFeeds = $this->Database->execute("SELECT * FROM tl_summarizeFeeds WHERE id IN(" . implode(',', $feedIDs) . ")");
+                $objFeeds = $this->Database->execute("SELECT * FROM tl_summarize_feeds  WHERE id IN(" . implode(',', $feedIDs) . ")");
 				$head = '';
 				
                 while($objFeeds->next())
