@@ -1,5 +1,5 @@
 {
-	"name":"cliffparnitzky/summarizeFeeds",
+	"name":"cliffparnitzky/summarize-feeds",
 	"description":"Summarize several news archives or calendars in one RSS or Atom feed.",
 	"keywords":["contao","feed","news feed","summarize feeds"],
 	"type":"contao-module",
