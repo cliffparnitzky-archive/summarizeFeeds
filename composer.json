@@ -21,6 +21,9 @@
 		"contao/core":">=3.0.0,<4.0.0-dev",
 		"contao-community-alliance/composer-installer":"*"
 	},
+	"replace": {
+		"contao-legacy/summarizeFeeds": "*"
+	},
 	"extra":{
 		"contao":{
 			"sources":{
