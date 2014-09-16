@@ -109,14 +109,11 @@ $GLOBALS['TL_DCA']['tl_summarize_feeds'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'__selector__'			=> array('resource', 'source'),
-		'default' 				=> '{resource_legend},resource',
-		'newsteaser' 			=> '{resource_legend},resource,newsArchives;{title_legend},title,alias,description;{settings_legend},source,maxItems,language,format,feedBase',
-		'calendarteaser' 		=> '{resource_legend},resource,calendar;{title_legend},title,alias,description;{settings_legend},source,maxItems,language,format,feedBase',
-		'news4wardteaser' 		=> '{resource_legend},resource,news4wardArchives;{title_legend},title,alias,description;{settings_legend},source,maxItems,language,format,feedBase',
-		'newstext' 				=> '{resource_legend},resource,newsArchives;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase',
-		'calendartext' 			=> '{resource_legend},resource,calendar;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase',
-		'news4wardtext' 		=> '{resource_legend},resource,news4wardArchives;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase'
+		'__selector__' => array('resource', 'source'),
+		'default'      => '{resource_legend},resource',
+		'news'         => '{resource_legend},resource,newsArchives;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase',
+		'calendar'     => '{resource_legend},resource,calendar;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase',
+		'news4'        => '{resource_legend},resource,news4Archives;{title_legend},title,alias,description;{settings_legend},source,letters,maxItems,language,format,feedBase'
 	),
 
 	// Fields
@@ -124,12 +121,13 @@ $GLOBALS['TL_DCA']['tl_summarize_feeds'] = array
 	(
 		'resource' => array
 		(
-			'label'				=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource'],
-			'inputType'			=> 'radio',
-			'exclude'			=> true,
-			'options'			=> array('news', 'calendar', 'news4ward'),
-			'reference'			=> &$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values'],
-			'eval'				=> array('mandatory'=>true, 'submitOnChange'=>true)
+			'label'              => &$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource'],
+			'inputType'          => 'radio',
+			'exclude'            => true,
+			//'options'            => array('news', 'calendar', 'news4'),
+			'options_callback'	=> array('tl_summarize_feeds', 'getResourceOptions'),
+			'reference'          => &$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values'],
+			'eval'               => array('mandatory'=>true, 'submitOnChange'=>true)
 		),
 		'newsArchives' => array
 		(
@@ -147,12 +145,12 @@ $GLOBALS['TL_DCA']['tl_summarize_feeds'] = array
 			'options_callback'	=> array('tl_summarize_feeds', 'getCalendar'),
 			'eval'              => array('multiple'=>true, 'mandatory'=>true)
 		),
-		'news4wardArchives' => array
+		'news4Archives' => array
 		(
-			'label'             => &$GLOBALS['TL_LANG']['tl_summarize_feeds']['news4wardArchives'],
+			'label'             => &$GLOBALS['TL_LANG']['tl_summarize_feeds']['news4Archives'],
 			'exclude'           => true,
 			'inputType'         => 'checkbox',
-			'options_callback'	=> array('tl_summarize_feeds', 'getNews4WardArchives'),
+			'options_callback'	=> array('tl_summarize_feeds', 'getNews4Archives'),
 			'eval'              => array('multiple'=>true, 'mandatory'=>true)
 		),
 		'title' => array
@@ -171,7 +169,7 @@ $GLOBALS['TL_DCA']['tl_summarize_feeds'] = array
 			'eval'      		=> array('mandatory'=>true, 'rgxp'=>'alnum', 'unique'=>true, 'doNotCopy'=>true, 'spaceToUnderscore'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
 			'save_callback' => array
 			(
-				array('tl_summarize_feeds', 'checkFeedAlias')
+				//array('tl_summarize_feeds', 'checkFeedAlias')
 			)
 		),
 		'description' => array
@@ -187,9 +185,9 @@ $GLOBALS['TL_DCA']['tl_summarize_feeds'] = array
 			'default'   		=> 'teaser',
 			'exclude'   		=> true,
 			'inputType'			=> 'select',
-			'options'   		=> array('teaser', 'text'),
+			'options'   		=> array('teaser'), //, 'text'),
 			'reference' 		=> &$GLOBALS['TL_LANG']['tl_summarize_feeds'],
-			'eval'      		=> array('submitOnChange'=>true)
+			'eval'      		=> array('submitOnChange'=>true, 'tl_class'=>'w50')
 		),
 		'letters' => array
 		(
@@ -260,6 +258,31 @@ class tl_summarize_feeds extends Backend
 	 * Get all news archives and return them as array
 	 * @return array
 	 */
+	public function getResourceOptions()
+	{
+		$arrOptions = array();
+		
+		if (in_array('news', $this->Config->getActiveModules()))
+		{
+			$arrOptions[] = 'news';
+		}
+		if (in_array('calendar', $this->Config->getActiveModules()))
+		{
+			$arrOptions[] = 'calendar';
+		}
+		if (in_array('news4ward', $this->Config->getActiveModules()))
+		{
+			$arrOptions[] = 'news4';
+		}
+
+		return $arrOptions;
+	}
+	
+	
+	/**
+	 * Get all news archives and return them as array
+	 * @return array
+	 */
 	public function getNewsArchives()
 	{
 		if (!$this->User->isAdmin && !is_array($this->User->news))
@@ -308,10 +331,10 @@ class tl_summarize_feeds extends Backend
 	}
 	
 	/**
-	 * Get all news archives and return them as array
+	 * Get all news4ward archives and return them as array
 	 * @return array
 	 */
-	public function getNews4WardArchives()
+	public function getNews4Archives()
 	{
 		if (!$this->User->isAdmin && !is_array($this->User->news))
 		{

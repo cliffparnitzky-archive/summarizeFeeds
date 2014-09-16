@@ -49,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_summarize_feeds']['settings_legend']	= 'Settings';
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['resource']		= array('Source', 'Please choose a source from which the feed is build.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['newsArchives'] 	= array('News archives', 'Choose the news archives of which the feed is build.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['calendar'] 		= array('Calendars', 'Choose the calendars of which the feed is build.');
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['news4Archives']	= array('News4Ward archives', 'Choose the news4ward archives of which the feed is build.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['title'] 			= array('Title', 'Assign a unique title.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['alias']          	= array('Alias', 'Here you can enter a unique filename (without extension). The XML feed file will be auto-generated in the root directory of your TYPOlight installation, e.g. as <em>name.xml</em>.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['description']    	= array('Description', 'Please enter a short description of the summarized feed.');
@@ -63,10 +64,10 @@ $GLOBALS['TL_LANG']['tl_summarize_feeds']['feedBase']       	= array('Base URL',
 /**
  * References
  */
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news']		 = 'News archives';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['calendar']	 = 'Calendars';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news4ward'] = 'News4ward';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['teaser'] 						 = 'Teasers';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['text']   						 = 'Article';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news']		= 'News archives';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['calendar']	= 'Calendars';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news4']		= 'News4Ward archives';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['teaser'] 						= 'Teasers';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['text']   						= 'Article';
 
 ?>

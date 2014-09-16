@@ -26,7 +26,7 @@
  */
 
 
-$GLOBALS['TL_DCA']['tl_calendar_events']['config']['onload_callback'][] =
+$GLOBALS['TL_DCA']['tl_calendar_events']['config']['onload_callback'][] = array('tl_calendar_summarizeFeeds', 'generateFeeds');
 $GLOBALS['TL_DCA']['tl_calendar_events']['config']['onsubmit_callback'][] = array('tl_calendar_summarizeFeeds', 'generateFeeds');
 
 

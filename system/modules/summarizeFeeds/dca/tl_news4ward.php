@@ -19,25 +19,25 @@
  * Software Foundation website at http://www.gnu.org/licenses/.
  *
  * PHP version 5
- * @copyright  Torben Stoffer 2009
+ * @copyright  Cliff Parnitzky 2014
  * @author     Torben Stoffer - torben@online.de 
  * @package    summarizeFeeds 
  * @license    LGPL 
  */
 
 
-$GLOBALS['TL_DCA']['tl_news']['config']['onload_callback'][] = array('tl_news_summarizeFeeds', 'generateFeeds');
-$GLOBALS['TL_DCA']['tl_news']['config']['onsubmit_callback'][] = array('tl_news_summarizeFeeds', 'generateFeeds');
+$GLOBALS['TL_DCA']['tl_news4ward']['config']['onload_callback'][] = array('tl_news4ward_summarizeFeeds', 'generateFeeds');
+$GLOBALS['TL_DCA']['tl_news4ward']['config']['onsubmit_callback'][] = array('tl_news4ward_summarizeFeeds', 'generateFeeds');
 
 
 /**
- * Class tl_news_summarizeFeeds
+ * Class tl_news4ward_summarizeFeeds
  *
  * @copyright  Torben Stoffer 2009
  * @author     Torben Stoffer - torben@online.de 
  * @package    summarizeFeeds
  */
-class tl_news_summarizeFeeds extends Backend
+class tl_news4ward_summarizeFeeds extends Backend
 {
 	/**
 	 * Update the RSS-feed

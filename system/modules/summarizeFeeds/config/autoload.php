@@ -16,5 +16,7 @@
  */
 ClassLoader::addClasses(array
 (
-	'summarizeFeeds' => 'system/modules/summarizeFeeds/summarizeFeeds.php',
+	// Classes
+	'NewsSummarizeFeeds' => 'system/modules/summarizeFeeds/classes/NewsSummarizeFeeds.php',
+	'summarizeFeeds'     => 'system/modules/summarizeFeeds/summarizeFeeds.php',
 ));

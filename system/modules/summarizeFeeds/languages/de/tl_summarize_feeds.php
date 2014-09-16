@@ -49,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_summarize_feeds']['settings_legend']	= 'Einstellungen';
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['resource']		= array('Quelle', 'Bitte w&auml;hlen Sie aus, ob Sie News-Archive oder Kalender in einem Feed b&uuml;ndeln wollen.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['newsArchives'] 	= array('News-Archive', 'W&auml;hlen Sie die Newsarchive aus, aus denen der Feed erstellt werden soll.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['calendar']		= array('Kalender', 'W&auml;hlen Sie die Kalender aus, aus denen der Feed erstellt werden soll.');
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['news4Archives']	= array('News4Ward Beitragsarchive', 'W&auml;hlen Sie die News4Ward Beitragsarchive aus, aus denen der Feed erstellt werden soll.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['title'] 			= array('Titel', 'Geben Sie einen eindeutigen Titel an.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['alias']          	= array('Alias', 'Hier können Sie einen eindeutigen Dateinamen (ohne Endung) eingeben. Die XML-Datei wird automatisch im Wurzelverzeichnis Ihrer TYPOlight-Installation erstellt, z.B. als <em>name.xml</em>.');
 $GLOBALS['TL_LANG']['tl_summarize_feeds']['description']    = array('Beschreibung', 'Bitte geben Sie eine kurze Beschreibung des zusammengefassten Feeds ein.');
@@ -63,10 +64,10 @@ $GLOBALS['TL_LANG']['tl_summarize_feeds']['feedBase']       	= array('Basis-URL'
 /**
  * References
  */
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news']		 = 'News-Archive';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['calendar']	 = 'Kalender';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news4ward'] = 'News4ward';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['teaser'] 						 = 'Teasertexte';
-$GLOBALS['TL_LANG']['tl_summarize_feeds']['text']   						 = 'Beiträge';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news']		= 'News-Archive';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['calendar']	= 'Kalender';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['resource_values']['news4'] 		= 'News4Ward Beitragsarchive';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['teaser'] 						= 'Teasertexte';
+$GLOBALS['TL_LANG']['tl_summarize_feeds']['text']   						= 'Beiträge';
 
 ?>

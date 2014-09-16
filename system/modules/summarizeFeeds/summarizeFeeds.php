@@ -27,7 +27,7 @@
  */
 
  
-class summarizeFeeds extends Calendar
+class summarizeFeeds extends \Calendar
 {
 	/**
 	 * Update a particular RSS feed
@@ -125,29 +125,28 @@ class summarizeFeeds extends Calendar
 	 */
 	protected function description($settings, $teaser, $text)
 	{
+		$strText = $teaser;
 		if($settings['source'] == 'text')
 		{
-			$letters = $settings['letters'];
-			if($letters == 0)
+			$strText = $text;
+		}
+		$letters = $settings['letters'];
+		if($letters == 0)
+		{
+			return $strText;
+		}
+		else
+		{
+			if(strlen(strip_tags($strText)) < $letters + 10)
 			{
-				return $text;
+				return $strText;
 			}
 			else
 			{
-				if(strlen(strip_tags($text)) < $letters + 10)
-				{
-					return $text;
-				}
-				else
-				{
-					return substr($text, 0, strpos($text, " ", $letters)) . '...';
-				}
+				return substr($strText, 0, strpos($strText, " ", $letters)) . '...';
 			}
-		} 
-		else
-		{
-			return $teaser;
 		}
+		return $strText;
 	}
 
 	/**
@@ -171,7 +170,7 @@ class summarizeFeeds extends Calendar
 		$objFeed->published = $arrFeed['tstamp'];
 		
 		// Get items
-		if($arrFeed['resource'] == 'news') {
+		if($arrFeed['resource'] == 'news' && in_array('news', $this->Config->getActiveModules())) {
 			$archives = deserialize($arrFeed['newsArchives']);	
 			
 			if(count($archives) < 1 OR $strFile == '')
@@ -181,7 +180,7 @@ class summarizeFeeds extends Calendar
 			
 			$ids = '(pid='.implode(' OR pid=', $archives).')';
 		
-			$objNewsStmt = $this->Database->prepare("SELECT * FROM tl_news4ward_article WHERE ".$ids." AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY date DESC");
+			$objNewsStmt = $this->Database->prepare("SELECT * FROM tl_news WHERE ".$ids." AND (start='' OR start<?) AND (stop='' OR stop>?) AND published=1 ORDER BY date DESC");
 
 			if ($arrFeed['maxItems'] > 0)
 			{
@@ -190,12 +189,12 @@ class summarizeFeeds extends Calendar
 			
 			$objNews = $objNewsStmt->execute($time, $time);
 			
-			$this->import('newsSummarizeFeeds');
+			$this->import('NewsSummarizeFeeds');
 
 			// Parse items
 			while ($objNews->next())
 			{
-				$objParent = $this->Database->prepare("SELECT jumpTo FROM tl_news4ward WHERE id=?")
+				$objParent = $this->Database->prepare("SELECT jumpTo FROM tl_news_archive WHERE id=?")
 											->limit(1)
 											->execute($objNews->pid);
 			
@@ -216,7 +215,7 @@ class summarizeFeeds extends Calendar
 				$objItem = new FeedItem();
 				$objItem->title = $objNews->headline;
 				$objItem->description = $image. $this->description($arrFeed, $objNews->teaser, $objNews->text);
-				$objItem->link = (($objNews->source == 'external') ? '' : $this->getRootDNS($objPage->pid, $strLink)) . $this->newsSummarizeFeeds->newsGetLink($objNews, $strUrl);
+				$objItem->link = (($objNews->source == 'external') ? '' : $this->getRootDNS($objPage->pid, $strLink)) . $this->NewsSummarizeFeeds->newsGetLink($objNews, $strUrl);
 				$objItem->published = $objNews->date;
 
 				// Enclosure
@@ -238,7 +237,7 @@ class summarizeFeeds extends Calendar
 				
 				$objFeed->addItem($objItem);
 			}
-		} elseif($arrFeed['resource'] == 'calendar') {
+		} elseif ($arrFeed['resource'] == 'calendar' && in_array('calendar', $this->Config->getActiveModules())) {
 			$calendar = deserialize($arrFeed['calendar']);	
 			
 			if(count($calendar) < 1 OR $strFile == '')
@@ -360,6 +359,72 @@ class summarizeFeeds extends Calendar
 					}
 				}
 			}
+		} elseif($arrFeed['resource'] == 'news4' && in_array('news4ward', $this->Config->getActiveModules())) {
+			$archives = deserialize($arrFeed['news4Archives']);	
+			if(count($archives) < 1 OR $strFile == '')
+			{
+				return;
+			}
+			
+			
+			$objNewsStmt = $this->Database->prepare("SELECT * FROM tl_news4ward_article WHERE pid IN (".implode(',', $archives).") AND (start='' OR start<?) AND (stop='' OR stop>?) AND status='published' ORDER BY start DESC");
+
+			if ($arrFeed['maxItems'] > 0)
+			{
+				$objNewsStmt->limit($arrFeed['maxItems']);
+			}
+			
+			$objNews = $objNewsStmt->execute($time, $time);
+			
+			//$this->import('NewsSummarizeFeeds');
+
+			// Parse items
+			while ($objNews->next())
+			{
+				$objParent = $this->Database->prepare("SELECT jumpTo FROM tl_news4ward WHERE id=?")
+											->limit(1)
+											->execute($objNews->pid);
+			
+				// Get default URL
+				$objPage = $this->Database->prepare("SELECT id, pid, alias, language FROM tl_page WHERE id=?")
+											->limit(1)
+											->execute($objParent->jumpTo);
+
+				//$strUrl = $this->generateFrontendUrl($objPage->fetchAssoc(), '/items/%s');
+				$strUrl = $this->generateFrontendUrl($objPage->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/items/%s'), $objPage->language);
+				
+				if (strlen($objNews->singleSRC) > 0) {
+        			$image = (($objNews->source == 'external') ? '' : $strLink) . $this->getImage($objNews->singleSRC, 250,null);
+        			$image = '<img src="' . $image . '" border="0" />' ;
+        		} else {
+                    $image = "";
+                }
+				
+				$objItem = new FeedItem();
+				$objItem->title = $objNews->title;
+				$objItem->description = $image . $this->description($arrFeed, $objNews->teaser, '');
+				$objItem->link = (($objNews->source == 'external') ? '' : $this->getRootDNS($objPage->pid, $strLink)). sprintf($strUrl, $objNews->alias);// . $this->NewsSummarizeFeeds->newsGetLink($objNews, $strUrl);
+				$objItem->published = $objNews->start;
+
+				// Enclosure
+				if ($objNews->addEnclosure)
+				{
+					$arrEnclosure = deserialize($objNews->enclosure, true);
+
+					if (is_array($arrEnclosure))
+					{
+						foreach ($arrEnclosure as $strEnclosure)
+						{
+							if (is_file(TL_ROOT . '/' . $strEnclosure))
+							{				
+								$objItem->addEnclosure($strEnclosure);
+							}
+						}
+					}
+				}
+				
+				$objFeed->addItem($objItem);
+			}
 		}
 		
 		$write = str_replace('</generator>', ' - Extension summarizeFeeds</generator>', $objFeed->$strType());
@@ -469,14 +534,5 @@ class summarizeFeeds extends Calendar
         return $strBuffer;
     }  
 }
-
-
-class newsSummarizeFeeds extends News
-{
-	public function newsGetLink(Database_Result $obj, $strUrl)
-	{
-		return $this->getLink($obj, $strUrl);
-	}
-}z
 
 ?>

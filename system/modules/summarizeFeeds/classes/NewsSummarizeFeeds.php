@@ -2,7 +2,7 @@
 
 /**
  * TYPOlight webCMS
- * Copyright (C) 2005 Leo Feyer
+ * Copyright (C) 2005-2009 Leo Feyer
  *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,32 +21,16 @@
  * PHP version 5
  * @copyright  Torben Stoffer 2009
  * @author     Torben Stoffer - torben@online.de 
- * @package    summarizeFeeds 
- * @license    LGPL 
- */
-
-
-$GLOBALS['TL_DCA']['tl_news']['config']['onload_callback'][] = array('tl_news_summarizeFeeds', 'generateFeeds');
-$GLOBALS['TL_DCA']['tl_news']['config']['onsubmit_callback'][] = array('tl_news_summarizeFeeds', 'generateFeeds');
-
-
-/**
- * Class tl_news_summarizeFeeds
- *
- * @copyright  Torben Stoffer 2009
- * @author     Torben Stoffer - torben@online.de 
  * @package    summarizeFeeds
+ * @license    LGPL
+ * @filesource
  */
-class tl_news_summarizeFeeds extends Backend
+
+class NewsSummarizeFeeds extends News
 {
-	/**
-	 * Update the RSS-feed
-	 * @param object
-	 */
-	public function generateFeeds()
+	public function newsGetLink(Database_Result $obj, $strUrl)
 	{
-		$this->import('summarizeFeeds');
-		$this->summarizeFeeds->generateFeeds();
+		return $this->getLink($obj, $strUrl);
 	}
 }
 
