@@ -3,6 +3,8 @@ Contao Extension: summarizeFeeds
 
 Summarize several news archives or calendars in one RSS or Atom feed.
 
+**Attention** This extension is deprecated. In Cintao 3.x.x. this function is on board.
+
 
 Installation
 ------------
